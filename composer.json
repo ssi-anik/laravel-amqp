@@ -31,10 +31,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Anik\\Amqp\\ServiceProviders\\AmqpServiceProvider"
+                "Anik\\Laravel\\Amqp\\Providers\\AmqpServiceProvider"
             ],
             "aliases": {
-                "Amqp": "Anik\\Amqp\\Facades\\Amqp"
+                "Amqp": "Anik\\Laravel\\Amqp\\Facades\\Amqp"
             }
         }
     }
