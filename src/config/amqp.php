@@ -24,7 +24,7 @@ return [
                     [
                         'host' => env('AMQP_HOST', 'localhost'),
                         'port' => env('AMQP_PORT', 5672),
-                        'username' => env('AMQP_USERNAME', ''),
+                        'user' => env('AMQP_USER', ''),
                         'password' => env('AMQP_PASSWORD', ''),
                         'vhost' => env('AMQP_VHOST', '/'),
                     ],
