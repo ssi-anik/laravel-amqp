@@ -3,10 +3,12 @@
 namespace Anik\Laravel\Amqp\Providers;
 
 use Anik\Laravel\Amqp\AmqpManager;
+use Anik\Laravel\Amqp\AmqpPubSub;
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
-class AmqpServiceProvider extends ServiceProvider
+class AmqpServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     public function boot(): void
     {
@@ -25,20 +27,28 @@ class AmqpServiceProvider extends ServiceProvider
 
     public function register(): void
     {
+        $this->registerManagers();
+        $this->registerFacades();
+        $this->registerAliases();
+    }
+
+    public function registerFacades(): void
+    {
         $this->app->bind(
             'amqp',
             function ($app) {
                 return app(AmqpManager::class);
             }
         );
+    }
 
-        $this->app->alias(
-            'amqp',
-            function ($app) {
-                return app(AmqpManager::class);
-            }
-        );
+    public function registerAliases(): void
+    {
+        $this->app->alias(AmqpManager::class, AmqpPubSub::class);
+    }
 
+    public function registerManagers(): void
+    {
         $this->app->singleton(
             AmqpManager::class,
             function ($app) {
@@ -49,7 +59,7 @@ class AmqpServiceProvider extends ServiceProvider
 
     public function provides(): array
     {
-        return ['amqp', AmqpManager::class,];
+        return ['amqp', AmqpManager::class, AmqpPubSub::class];
     }
 
     private function isLumen(): bool
