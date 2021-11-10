@@ -42,15 +42,16 @@ class AmqpManager
 
     protected function resolve(string $name): AmqpPubSub
     {
-        $config = $this->config(sprintf('amqp.connections.%s.connection', $name), []);
+        $config = $this->config(sprintf('amqp.connections.%s', $name), []);
+        $connection = $config['connection'] ?? [];
 
-        if (empty($config)) {
+        if (empty($connection)) {
             throw new LaravelAmqpException(
                 sprintf('Did you forget to set connection for "amqp.connections.%s"?', $name)
             );
         }
 
-        if (empty($hosts = $config['hosts'] ?? []) || !is_array($hosts)) {
+        if (empty($hosts = $connection['hosts'] ?? []) || !is_array($hosts)) {
             throw new LaravelAmqpException(
                 sprintf('Invalid hosts for connection "%s". Hosts must be an array.', $name)
             );
@@ -59,8 +60,8 @@ class AmqpManager
         return new Amqp(
             AmqpConnectionFactory::makeFromArray(
                 $hosts,
-                $config['options'] ?? [],
-                $config['class'] ?? AMQPLazySSLConnection::class
+                $connection['options'] ?? [],
+                $connection['class'] ?? AMQPLazySSLConnection::class
             ),
             $config
         );
