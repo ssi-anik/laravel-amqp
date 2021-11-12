@@ -122,6 +122,43 @@ class AmqpTest extends TestCase
         ];
     }
 
+    public function publishOptionsDataProvider(): array
+    {
+        return [
+            'when publish option is passed, should not use config value' => [
+                [
+                    'options' => [
+                        'publish' => [
+                            'batch_count' => 23,
+                        ],
+                    ],
+                    'expectations' => [
+                        'publish.batch_count' => 23,
+                    ],
+                ],
+            ],
+            'when publish option is not passed, should use config value if available' => [
+                [
+                    'config' => [
+                        'publish' => [
+                            'batch_count' => 37,
+                        ],
+                    ],
+                    'expectations' => [
+                        'publish.batch_count' => 37,
+                    ],
+                ],
+            ],
+            'when publish option and config both are unavailable' => [
+                [
+                    'expectations' => [
+                        'publish.batch_count' => null,
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function exchangeTestDataProvider(): array
     {
         return [
@@ -389,6 +426,45 @@ class AmqpTest extends TestCase
         $this->getAmqpInstance()->publish(
             'my message',
             'my-routing-key'
+        );
+    }
+
+    /**
+     * @dataProvider publishOptionsDataProvider
+     *
+     * @param array $data
+     */
+    public function testPublishPassesPublishOptionsIfAvailable(array $data)
+    {
+        $this->bindProducerToApp($producer = $this->getProducerMock($this->connection));
+
+        $expectations = $data['expectations'];
+
+        $producer
+            ->expects($this->once())
+            ->method('publishBatch')
+            ->with(
+                $this->anything(),
+                'my-routing-key',
+                $this->anything(),
+                $this->callback(
+                    function ($options) use ($expectations) {
+                        foreach ($expectations as $key => $value) {
+                            if (data_get($options, $key) !== $value) {
+                                return false;
+                            }
+                        }
+
+                        return true;
+                    }
+                )
+            );
+
+        $this->getAmqpInstance(null, ['publish' => $data['config']['publish'] ?? []])->publish(
+            'my message',
+            'my-routing-key',
+            null,
+            $data['options'] ?? []
         );
     }
 
