@@ -3,6 +3,7 @@
 namespace Anik\Laravel\Amqp\Test;
 
 use Anik\Laravel\Amqp\Amqp;
+use Anik\Laravel\Amqp\AmqpManager;
 use Anik\Laravel\Amqp\Exceptions\LaravelAmqpException;
 use Closure;
 use PhpAmqpLib\Connection\AMQPLazySocketConnection;
@@ -69,5 +70,11 @@ class AmqpManagerTest extends PackageBaseTestCase
 
         $this->expectException(LaravelAmqpException::class);
         \Anik\Laravel\Amqp\Facades\Amqp::connection();
+    }
+
+    public function testManagerCanForwardCallsByResolvingConnection()
+    {
+        $this->app->make(AmqpManager::class)->getProducer();
+        $this->app->make(AmqpManager::class)->getConsumer();
     }
 }
