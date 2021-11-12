@@ -17,5 +17,5 @@ interface AmqpPubSub
         ?Queue $queue = null,
         ?Qos $qos = null,
         array $options = []
-    ): bool;
+    ): void;
 }

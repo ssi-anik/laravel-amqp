@@ -65,7 +65,7 @@ class Amqp implements AmqpPubSub
         ?Queue $queue = null,
         ?Qos $qos = null,
         array $options = []
-    ): bool {
+    ): void {
         $handler = $this->ensureHandlerIsConsumableInstance($handler);
 
         if (is_null($exchange) && !isset($options['exchange'])) {
@@ -88,7 +88,7 @@ class Amqp implements AmqpPubSub
             $options['consumer'] = $consumerOptions;
         }
 
-        return $this->getConsumer()->consume($handler, $bindingKey, $exchange, $queue, $qos, $options);
+        $this->getConsumer()->consume($handler, $bindingKey, $exchange, $queue, $qos, $options);
     }
 
 
