@@ -6,5 +6,5 @@ use Anik\Amqp\Exchanges\Exchange;
 
 interface AmqpPubSub
 {
-    public function publish($messages, string $routingKey = '', ?Exchange $exchange = null, array $options = []): void;
+    public function publish($messages, string $routingKey = '', ?Exchange $exchange = null, array $options = []): bool;
 }
