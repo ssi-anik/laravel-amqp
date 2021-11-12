@@ -93,6 +93,15 @@ return [
                 'ticket' => null,
                 'batch_count' => 500,
             ],*/
+
+            /**
+             * Default Bind Options
+             */
+            /*'bind' => [
+                'no_wait' => false,
+                'arguments' => [],
+                'ticket' => null,
+            ],*/
         ],
     ],
 ];
