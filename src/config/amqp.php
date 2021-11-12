@@ -80,8 +80,8 @@ return [
 
             'qos' => [
                 'enabled' => env('AMQP_QOS_ENABLED', false),
-                'prefetch_size' => env('AMQP_QOS_PREF_SIZE', 0),
-                'prefetch_count' => env('AMQP_QOS_PREF_COUNT', 1),
+                'prefetch_size' => env('AMQP_QOS_PREFETCH_SIZE', 0),
+                'prefetch_count' => env('AMQP_QOS_PREFETCH_COUNT', 1),
                 'global' => env('AMQP_QOS_GLOBAL', false),
             ],
 
