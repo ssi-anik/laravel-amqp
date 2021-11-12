@@ -57,6 +57,7 @@ return [
             ],
 
             'queue' => [
+                'name' => env('AMQP_QUEUE_NAME', 'amqp.laravel.queue'),
                 'declare' => env('AMQP_QUEUE_DECLARE', false),
                 'passive' => env('AMQP_QUEUE_PASSIVE', false),
                 'durable' => env('AMQP_QUEUE_DURABLE', true),
