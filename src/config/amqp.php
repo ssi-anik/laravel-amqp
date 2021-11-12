@@ -103,6 +103,15 @@ return [
                 'arguments' => [],
                 'ticket' => null,
             ],*/
+
+            /**
+             * Default Consume Options
+             */
+            /*'consume' => [
+                'allowed_methods' => null,
+                'non_blocking' => false,
+                'timeout' => 0,
+            ],*/
         ],
     ],
 ];
