@@ -41,6 +41,10 @@ class Amqp implements AmqpPubSub
             $options['exchange'] = $this->getExchangeOptions();
         }
 
+        if (!isset($options['publish']) && isset($this->config['publish'])) {
+            $options['publish'] = $this->config['publish'];
+        }
+
         return $this->getProducer()->publishBatch($producibleMessages, $routingKey, $exchange, $options);
     }
 

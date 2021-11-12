@@ -83,6 +83,16 @@ return [
                 'prefetch_count' => env('AMQP_QOS_PREF_COUNT', 1),
                 'global' => env('AMQP_QOS_GLOBAL', false),
             ],
+
+            /**
+             * Default Publish options
+             */
+            /*'publish' => [
+                'mandatory' => false,
+                'immediate' => false,
+                'ticket' => null,
+                'batch_count' => 500,
+            ],*/
         ],
     ],
 ];
