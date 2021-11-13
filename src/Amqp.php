@@ -94,45 +94,14 @@ class Amqp implements AmqpPubSub
         $this->getConsumer()->consume($handler, $bindingKey, $exchange, $queue, $qos, $options);
     }
 
-
-    protected function defaultExchangeOptions(): array
-    {
-        return [
-            'name' => 'amq.direct',
-            'declare' => false,
-            'type' => 'topic',
-            'passive' => false,
-            'durable' => true,
-            'auto_delete' => false,
-            'internal' => false,
-            'no_wait' => false,
-            'arguments' => [],
-            'ticket' => null,
-        ];
-    }
-
-    protected function defaultQueueOptions(): array
-    {
-        return [
-            'declare' => false,
-            'passive' => false,
-            'durable' => true,
-            'exclusive' => false,
-            'auto_delete' => false,
-            'no_wait' => false,
-            'arguments' => [],
-            'ticket' => null,
-        ];
-    }
-
     protected function getExchangeOptions(): array
     {
-        return $this->config['exchange'] ?? $this->defaultExchangeOptions();
+        return $this->config['exchange'] ?? [];
     }
 
     protected function getQueueOptions(): array
     {
-        return $this->config['queue'] ?? $this->defaultQueueOptions();
+        return $this->config['queue'] ?? [];
     }
 
     protected function getBindOptions(): array
