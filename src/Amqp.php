@@ -54,8 +54,8 @@ class Amqp implements AmqpPubSub
             $options['exchange'] = $this->getExchangeOptions();
         }
 
-        if (!isset($options['publish']) && isset($this->config['publish'])) {
-            $options['publish'] = $this->config['publish'];
+        if (!isset($options['publish']) && ($publishOptions = $this->getPublishOptions())) {
+            $options['publish'] = $publishOptions;
         }
 
         return $this->getProducer()->publishBatch($producibleMessages, $routingKey, $exchange, $options);
@@ -102,6 +102,11 @@ class Amqp implements AmqpPubSub
     protected function getQueueOptions(): array
     {
         return $this->config['queue'] ?? [];
+    }
+
+    protected function getPublishOptions(): array
+    {
+        return $this->config['publish'] ?? [];
     }
 
     protected function getBindOptions(): array
