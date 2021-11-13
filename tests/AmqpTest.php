@@ -64,7 +64,7 @@ class AmqpTest extends TestCase
     protected function getConsumerMock(AbstractConnection $connection = null, array $options = []): Consumer
     {
         return $this->getMockBuilder(Consumer::class)->setConstructorArgs(
-            ['connection' => $connection, 'options' => $options]
+            ['connection' => $connection, 'channel' => null, 'options' => $options]
         )->getMock();
     }
 
