@@ -33,7 +33,10 @@ class Amqp implements AmqpPubSub
 
     public function getConsumer(array $options = []): Consumer
     {
-        return app()->make(Consumer::class, ['connection' => $this->connection, 'options' => $options]);
+        return app()->make(
+            Consumer::class,
+            ['connection' => $this->connection, 'channel' => null, 'options' => $options]
+        );
     }
 
     public function publish($messages, string $routingKey = '', ?Exchange $exchange = null, array $options = []): bool
