@@ -2,6 +2,7 @@ anik/laravel-amqp
 [![codecov](https://codecov.io/gh/ssi-anik/laravel-amqp/branch/master/graph/badge.svg?token=IeJwxqQOuD)](https://codecov.io/gh/ssi-anik/laravel-amqp)
 [![Total Downloads](https://poser.pugx.org/anik/laravel-amqp/downloads)](//packagist.org/packages/anik/laravel-amqp)
 [![Latest Stable Version](https://poser.pugx.org/anik/laravel-amqp/v)](//packagist.org/packages/anik/laravel-amqp)
+[![PHP Version Require](http://poser.pugx.org/anik/laravel-amqp/require/php)](//packagist.org/packages/anik/laravel-amqp)
 ===
 
 [anik/amqp](https://packagist.org/packages/anik/amqp) wrapper for Laravel-ish frameworks.
@@ -13,11 +14,6 @@ anik/laravel-amqp
 # Examples
 
 Checkout the [repository](https://github.com/ssi-anik/laravel-rabbitmq-producer-consumer-example) for example.
-
-# Requirements
-
-- PHP `^7.2 | ^8.0`
-- anik/amqp `^2.0`
 
 # Documentation
 
@@ -101,61 +97,61 @@ $messages = 'my message';
 // $messages = ['another message', new Anik\Amqp\ProducibleMessage('also another message')];
 
 Amqp::publish($messages); // publishes to default connection
-Amqp::connection('gcp-rabbitmq')->publish($messages); // publishes to gcp-rabbitmq connection
+Amqp::connection('rabbitmq')->publish($messages); // publishes to rabbitmq connection
 
 app('amqp')->publish($messages); // publishes to default connection
-app('amqp')->connection('gcp-rabbitmq')->publish($messages); // publishes to gcp-rabbitmq connection
+app('amqp')->connection('rabbitmq')->publish($messages); // publishes to rabbitmq connection
 
 app()->make('amqp')->publish($messages); // publishes to default connection
-app()->make('amqp')->connection('gcp-rabbitmq')->publish($messages); // publishes to gcp-rabbitmq connection
+app()->make('amqp')->connection('rabbitmq')->publish($messages); // publishes to rabbitmq connection
 
 /** @var \Anik\Laravel\Amqp\AmqpManager $amqpManager */
 $amqpManager->publish($messages); // publishes to default connection
-$amqpManager->connection('gcp-rabbitmq')->publish($messages); // publishes to gcp-rabbitmq connection
+$amqpManager->connection('rabbitmq')->publish($messages); // publishes to rabbitmq connection
 
 
 Amqp::consume(function(ConsumableMessage $message) {
     var_dump($message->getMessageBody());
     $message->ack();
 }); // consumes from default connection
-Amqp::connection('gcp-rabbitmq')->consume(function(ConsumableMessage $message) {
+Amqp::connection('rabbitmq')->consume(function(ConsumableMessage $message) {
     var_dump($message->getMessageBody());
     $message->ack();
-}); // consumes from gcp-rabbitmq connection
+}); // consumes from rabbitmq connection
 
 app('amqp')->consume(function(ConsumableMessage $message) {
     var_dump($message->getMessageBody());
     $message->ack();
 }); // consumes from default connection
-app('amqp')->connection('gcp-rabbitmq')->consume(function(ConsumableMessage $message) {
+app('amqp')->connection('rabbitmq')->consume(function(ConsumableMessage $message) {
     var_dump($message->getMessageBody());
     $message->ack();
-}); // consumes from gcp-rabbitmq connection
+}); // consumes from rabbitmq connection
 
 app()->make('amqp')->consume(function(ConsumableMessage $message) {
     var_dump($message->getMessageBody());
     $message->ack();
 }); // consumes from default connection
-app()->make('amqp')->connection('gcp-rabbitmq')->consume(function(ConsumableMessage $message) {
+app()->make('amqp')->connection('rabbitmq')->consume(function(ConsumableMessage $message) {
     var_dump($message->getMessageBody());
     $message->ack();
-}); // consumes from gcp-rabbitmq connection
+}); // consumes from rabbitmq connection
 
 /** @var \Anik\Laravel\Amqp\AmqpManager $amqpManager */
 $amqpManager->consume(function(ConsumableMessage $message) {
     var_dump($message->getMessageBody());
     $message->ack();
 }); // consumes from default connection
-$amqpManager->connection('gcp-rabbitmq')->consume(function(ConsumableMessage $message) {
+$amqpManager->connection('rabbitmq')->consume(function(ConsumableMessage $message) {
     var_dump($message->getMessageBody());
     $message->ack();
-}); // consumes from gcp-rabbitmq connection
+}); // consumes from rabbitmq connection
 ```
 
 ### Note
 
 In this documentation, it'll use **FACADE** afterwards. If you're using **Lumen**, then you can use other approaches.
-The package doesn't require you to enable Facade.
+The package **doesn't require enabling Facade**.
 
 ## Publishing messages
 
@@ -183,7 +179,7 @@ Amqp::connection('rabbitmq')->publish($messages, $routingKey, $exchange, $option
 - If `$messages` are not an implementation of `Anik\Amqp\Producible`, then those messages will be converted
   to `Anik\Amqp\Producible` using `Anik\Amqp\ProducibleMessage`.
 - When converting to `Anik\Amqp\Producible`, it'll try to use `$options['message']` as message properties. If not set,
-  it'll then try to use `amqp.connections.*.message` properties.
+  it'll then try to use `amqp.connections.*.message` properties if available.
 - If `$exchange` is set to null, it'll check if `$options['exchange']` is set or not. If not set, it'll then
   use `amqp.connections.*.exchange` properties.
 - If `$options['publish']` is not set, it'll try to use `amqp.connections.*.publish` properties if available.
@@ -211,3 +207,16 @@ Amqp::connection('rabbitmq')->consume($handler, $bindingKey, $exchange, $queue, 
     * Key `consumer` - Accepts: `array`. Refer to `amqp.connections.*.consumer`.
     * Key `bind` - Accepts: `array`. Refer
       to [`Anik\Amqp\Consumer::consume`](https://github.com/ssi-anik/amqp#documentation)
+
+### Note
+
+- If `$handler` are not an implementation of `Anik\Amqp\Consumable`, then the handler will be converted
+  to `Anik\Amqp\Consumable` using `Anik\Amqp\ConsumableMessage`.
+- If `$exchange` is set to null, it'll check if `$options['exchange']` is set or not. If not set, it'll then
+  use `amqp.connections.*.exchange` properties if available.
+- If `$queue` is set to null, it'll check if `$options['queue']` is set or not. If not set, it'll then
+  use `amqp.connections.*.queue` properties if available.
+- If `$qos` is set to null, it'll check if `$options['qos']` is set or not. If not set, it'll then
+  use `amqp.connections.*.qos` properties if `amqp.connections.*.qos.enabled` is set to a truthy value.
+- If `$options['bind']` is not set, it'll use `amqp.connections.*.bind` properties if available.
+- If `$options['consumer']` is not set, it'll use `amqp.connections.*.consumer` properties if available.
