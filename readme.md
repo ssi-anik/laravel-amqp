@@ -1,8 +1,8 @@
 anik/laravel-amqp
 [![codecov](https://codecov.io/gh/ssi-anik/laravel-amqp/branch/master/graph/badge.svg?token=IeJwxqQOuD)](https://codecov.io/gh/ssi-anik/laravel-amqp)
-[![Total Downloads](https://poser.pugx.org/anik/laravel-amqp/downloads)](//packagist.org/packages/anik/laravel-amqp)
-[![Latest Stable Version](https://poser.pugx.org/anik/laravel-amqp/v)](//packagist.org/packages/anik/laravel-amqp)
 [![PHP Version Require](http://poser.pugx.org/anik/laravel-amqp/require/php)](//packagist.org/packages/anik/laravel-amqp)
+[![Latest Stable Version](https://poser.pugx.org/anik/laravel-amqp/v)](//packagist.org/packages/anik/laravel-amqp)
+[![Total Downloads](https://poser.pugx.org/anik/laravel-amqp/downloads)](//packagist.org/packages/anik/laravel-amqp)
 ===
 
 [anik/amqp](https://packagist.org/packages/anik/amqp) wrapper for Laravel-ish frameworks.
@@ -80,8 +80,7 @@ name.
 - `amqp.connections.*.exchange` holds the default properties of your exchange when publishing & consuming.
 - `amqp.connections.*.queue` holds the default properties of your queue when consuming.
 - `amqp.connections.*.consumer` holds the default properties of consumer when consuming.
-- `amqp.connections.*.qos` holds the default properties of QoS when consuming. QoS will be applied
-  if `amqp.connections.*.qos.enabled` is **truthy** when picking default config.
+- `amqp.connections.*.qos` holds the default properties of QoS when consuming.
 
 ## Usage
 
@@ -164,9 +163,9 @@ Amqp::publish($messages, $routingKey, $exchange, $options);
 Amqp::connection('rabbitmq')->publish($messages, $routingKey, $exchange, $options);
 ```
 
-- `$messages` Type: `mixed`. **Required**. It can be a single message of any scalar type or implementation
-  of `Anik\Amqp\Producible`, or an array of messages of any scalar type or implementation of `Anik\Amqp\Producible`.
-- `$routingKey` Type: `string`. **Optional**. Default: `''` (empty string). Routing key for messages.
+- `$messages` Type: `mixed`. **Required**. It can be a single message, or an array of messages of any scalar type or implementation
+  of `Anik\Amqp\Producible`.
+- `$routingKey` Type: `string`. **Optional**. Default: `''` (empty string).
 - `$exchange` Type: `null | Anik\Amqp\Exchanges\Exchange`. **Optional**. Default: `null`.
 - `$options` Type: `array`. **Optional**. Default: `[]`.
     * Key `message` - Accepts: `array`. Valid properties for `PhpAmqpLib\Message\AMQPMessage`.
@@ -180,7 +179,7 @@ Amqp::connection('rabbitmq')->publish($messages, $routingKey, $exchange, $option
   to `Anik\Amqp\Producible` using `Anik\Amqp\ProducibleMessage`.
 - When converting to `Anik\Amqp\Producible`, it'll try to use `$options['message']` as message properties. If not set,
   it'll then try to use `amqp.connections.*.message` properties if available.
-- If `$exchange` is set to null, it'll check if `$options['exchange']` is set or not. If not set, it'll then
+- If `$exchange` is set to `null`, it'll check if `$options['exchange']` is set or not. If not set, it'll then
   use `amqp.connections.*.exchange` properties.
 - If `$options['publish']` is not set, it'll try to use `amqp.connections.*.publish` properties if available.
 
@@ -210,13 +209,13 @@ Amqp::connection('rabbitmq')->consume($handler, $bindingKey, $exchange, $queue, 
 
 ### Note
 
-- If `$handler` are not an implementation of `Anik\Amqp\Consumable`, then the handler will be converted
+- If `$handler` is not an implementation of `Anik\Amqp\Consumable`, then the handler will be converted
   to `Anik\Amqp\Consumable` using `Anik\Amqp\ConsumableMessage`.
-- If `$exchange` is set to null, it'll check if `$options['exchange']` is set or not. If not set, it'll then
+- If `$exchange` is set to `null`, it'll check if `$options['exchange']` is set or not. If not set, it'll then
   use `amqp.connections.*.exchange` properties if available.
-- If `$queue` is set to null, it'll check if `$options['queue']` is set or not. If not set, it'll then
+- If `$queue` is set to `null`, it'll check if `$options['queue']` is set or not. If not set, it'll then
   use `amqp.connections.*.queue` properties if available.
-- If `$qos` is set to null, it'll check if `$options['qos']` is set or not. If not set, it'll then
-  use `amqp.connections.*.qos` properties if `amqp.connections.*.qos.enabled` is set to a truthy value.
+- If `$qos` is set to `null`, it'll check if `$options['qos']` is set or not. If not set, it'll then
+  use `amqp.connections.*.qos` properties if `amqp.connections.*.qos.enabled` is set to a **truthy** value.
 - If `$options['bind']` is not set, it'll use `amqp.connections.*.bind` properties if available.
 - If `$options['consumer']` is not set, it'll use `amqp.connections.*.consumer` properties if available.
