@@ -1,4 +1,4 @@
-name: Run tests and coverage
+name: PSR-12 coding standard, Test, Coverage
 on:
     pull_request:
     push:
@@ -6,8 +6,27 @@ on:
             - master
 
 jobs:
+    coding-standard:
+        name: PSR-12 coding standard
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v2
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.0
+
+            -   name: Install PHP code sniffer
+                run: composer global require squizlabs/php_codesniffer
+
+            -   name: Check against PSR12 standard
+                run: |
+                    `composer global config bin-dir --absolute --quiet`/phpcs --standard=PSR12 --ignore="src/Facades/*" ./src
+
     tests:
-        name: Laravel ${{ matrix.laravel }} with PHP ${{ matrix.php }} - OS ${{ matrix.os }}
+        needs: coding-standard
+        name: "OS: ${{ matrix.os }} | PHP: ${{ matrix.php }} | Laravel: ${{ matrix.laravel }}"
         runs-on: ${{ matrix.os }}
 
         strategy:
@@ -15,10 +34,10 @@ jobs:
             matrix:
                 os: [ ubuntu-latest ]
                 php: [ 7.2, 7.3, 7.4, 8.0 ]
-                laravel: [ ^6, ^7, ^8 ]
+                laravel: [ 6, 7, 8 ]
                 exclude:
                     -   php: 7.2
-                        laravel: ^8
+                        laravel: 8
 
         steps:
             -   name: Checkout code
@@ -31,7 +50,7 @@ jobs:
 
             -   name: Install dependencies
                 run: |
-                    composer require illuminate/support:${{ matrix.laravel }} --no-interaction --prefer-dist
+                    composer require illuminate/support:^${{ matrix.laravel }} --no-interaction --prefer-dist
 
             -   name: Run tests
                 run: ./vendor/bin/phpunit --testdox --verbose
