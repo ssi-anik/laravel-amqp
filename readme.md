@@ -68,15 +68,16 @@ $app->register(Anik\Laravel\Amqp\Providers\AmqpServiceProvider::class);
 In your `config/amqp.php`, you can define multiple connections and use them from your code by pointing the connection
 name.
 
-- `amqp.connections.*.connection` has a key `class` denoting the underlying Amqp connection. By default, it uses lazy
+- `amqp.default` denoting the default connection. Will be used if no connection is specified when producing or consuming
+  messages.
+- `amqp.connections.*.connection.class` denoting the underlying Amqp connection to be used. By default, it uses lazy
   connection. You can change it to any implementation of `PhpAmqpLib\Connection\AbstractConnection`.
-- `amqp.connections.*.connection` has a key `hosts`. You can define multiple hosts to leverage amqplib's creation of
-  connection from multiple hosts. Your `hosts` array's each config must contain `host`, `port`, `user`, `password`. It
-  can also contain `vhost` which is optional. Lazy connections cannot have **more than one host** configuration
-  otherwise it'll throw error.
+- `amqp.connections.*.connection.hosts` can have multiple host configuration. Each host config must contain `host`
+  , `port`, `user`, `password` keys. It can also contain `vhost` which is optional. Lazy connections cannot have **more
+  than one host** configuration otherwise it'll throw error.
 - You can also pass optional array of parameters through `amqp.connections.*.connection.options` when creating an
   instance of `amqp.connections.*.connection.class` internally.
-- `amqp.connections.*.message` holds the default properties of your message when publishing.
+- `amqp.connections.*.message` holds the default properties of a message when publishing.
 - `amqp.connections.*.exchange` holds the default properties of your exchange when publishing & consuming.
 - `amqp.connections.*.queue` holds the default properties of your queue when consuming.
 - `amqp.connections.*.consumer` holds the default properties of consumer when consuming.
@@ -84,7 +85,7 @@ name.
 
 ## Usage
 
-All the following are the same.
+The followings work the same.
 
 ```php
 use Anik\Amqp\ConsumableMessage;
@@ -163,8 +164,8 @@ Amqp::publish($messages, $routingKey, $exchange, $options);
 Amqp::connection('rabbitmq')->publish($messages, $routingKey, $exchange, $options);
 ```
 
-- `$messages` Type: `mixed`. **Required**. It can be a single message, or an array of messages of any scalar type or implementation
-  of `Anik\Amqp\Producible`.
+- `$messages` Type: `mixed`. **Required**. It can be a single message, or an array of messages of any scalar type or
+  implementation of `Anik\Amqp\Producible`.
 - `$routingKey` Type: `string`. **Optional**. Default: `''` (empty string).
 - `$exchange` Type: `null | Anik\Amqp\Exchanges\Exchange`. **Optional**. Default: `null`.
 - `$options` Type: `array`. **Optional**. Default: `[]`.
@@ -175,12 +176,12 @@ Amqp::connection('rabbitmq')->publish($messages, $routingKey, $exchange, $option
 
 ### Note
 
-- If `$messages` are not an implementation of `Anik\Amqp\Producible`, then those messages will be converted
+- If any of the `$messages` is not an implementation of `Anik\Amqp\Producible`, then that message will be converted
   to `Anik\Amqp\Producible` using `Anik\Amqp\ProducibleMessage`.
-- When converting to `Anik\Amqp\Producible`, it'll try to use `$options['message']` as message properties. If not set,
+- When converting to `Anik\Amqp\Producible`, it'll try to use `$options['message']` as the message property. If not set,
   it'll then try to use `amqp.connections.*.message` properties if available.
 - If `$exchange` is set to `null`, it'll check if `$options['exchange']` is set or not. If not set, it'll then
-  use `amqp.connections.*.exchange` properties.
+  use `amqp.connections.*.exchange` properties if available.
 - If `$options['publish']` is not set, it'll try to use `amqp.connections.*.publish` properties if available.
 
 ## Consuming messages
@@ -219,3 +220,53 @@ Amqp::connection('rabbitmq')->consume($handler, $bindingKey, $exchange, $queue, 
   use `amqp.connections.*.qos` properties if `amqp.connections.*.qos.enabled` is set to a **truthy** value.
 - If `$options['bind']` is not set, it'll use `amqp.connections.*.bind` properties if available.
 - If `$options['consumer']` is not set, it'll use `amqp.connections.*.consumer` properties if available.
+
+## Testing
+
+The package allows asserting a few scenarios. Before you can run those assertions, you'll need use `Amqp::fake()`.
+
+```php
+<?php
+
+use Anik\Laravel\Amqp\Facades\Amqp;
+use PHPUnit\Framework\TestCase;
+
+class MyTest extends TestCase 
+{
+    public function testIfMessageWasProduced () {
+        Amqp::fake();
+        // ... Your code
+        
+        Amqp::assertPublished();
+        // Amqp::assertPublished("my-message");
+        // Amqp::assertPublished(Anik\Amqp\ProducibleMessage::class);
+        // Amqp::assertPublished(Anik\Amqp\Producible::class);
+        Amqp::assertPublishedOnConnection('rabbitmq');
+    }
+}
+```
+
+- `Anik\Laravel\Amqp\Facades\Amqp::assertPublishedOnConnection(string $name)` - To check if at least one message was
+  published on the connection `$name`.
+- `Anik\Laravel\Amqp\Facades\Amqp::assertPublishedOnExchange(string $name)` - To check if at least one message was
+  published on exchange `$name`.
+- `Anik\Laravel\Amqp\Facades\Amqp::assertPublishedOnExchangeType(string $type)` - To check if at least one message was
+  published on exchange type `$type`.
+- `Anik\Laravel\Amqp\Facades\Amqp::assertPublishedWithRoutingKey(string $key)` - To check if at least one message was
+  published with routing key `$key`.
+- `Anik\Laravel\Amqp\Facades\Amqp::assertPublished($message = null)`
+    * If `$message` is `null`, it will check if at least one message was published.
+    * Otherwise, checks in the following order.
+        - If a message exactly matches the `$message`.
+        - If a message exactly matches the `get_class($message)`.
+        - If a message is an implementation of `$message`.
+- `Anik\Laravel\Amqp\Facades\Amqp::assertNotPublished($message = null)`
+    * If `$message` is `null`, it will check if no message was published.
+    * Otherwise, checks in the following order.
+        - No message was published that exactly matches the `$message`.
+        - No message was published that exactly matches the `get_class($message)`.
+        - No message was published that is an implementation of `$message`.
+
+### Note
+
+Using `Anik\Laravel\Amqp\Facades\Amqp::consume()` after `Anik\Laravel\Amqp\Facades\Amqp::fake()` will throw exception.
