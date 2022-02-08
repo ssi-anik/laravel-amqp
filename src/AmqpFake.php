@@ -6,7 +6,7 @@ use Anik\Amqp\Exchanges\Exchange;
 use Anik\Amqp\Qos\Qos;
 use Anik\Amqp\Queues\Queue;
 use Anik\Laravel\Amqp\Exceptions\LaravelAmqpException;
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Assert;
@@ -17,7 +17,7 @@ class AmqpFake extends AmqpManager implements AmqpPubSub
     protected $activeConnection;
     protected $connections;
 
-    public function __construct(Application $app)
+    public function __construct(Container $app)
     {
         parent::__construct($app);
         $this->messages = [];
