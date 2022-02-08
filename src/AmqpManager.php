@@ -4,8 +4,11 @@ namespace Anik\Laravel\Amqp;
 
 use Anik\Amqp\AmqpConnectionFactory;
 use Anik\Laravel\Amqp\Exceptions\LaravelAmqpException;
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Config\Repository;
+use Illuminate\Contracts\Container\Container;
 use PhpAmqpLib\Connection\AMQPLazySSLConnection;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class AmqpManager
 {
@@ -13,7 +16,7 @@ class AmqpManager
 
     protected $connections;
 
-    public function __construct(Application $app)
+    public function __construct(Container $app)
     {
         $this->app = $app;
     }
@@ -37,7 +40,13 @@ class AmqpManager
 
     protected function config($key, $default = null)
     {
-        return $this->app['config'][$key] ?? $default;
+        try {
+            $repository = $this->app->get('config');
+        } catch (NotFoundExceptionInterface | ContainerExceptionInterface $e) {
+            return $default;
+        }
+
+        return $repository instanceof Repository ? $repository->get($key, $default) : $default;
     }
 
     protected function resolve(string $name): AmqpPubSub
