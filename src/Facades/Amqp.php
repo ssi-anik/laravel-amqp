@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void assertPublishedOnExchangeType(string $type)
  * @method static void assertPublishedWithRoutingKey(string $key)
  * @method static void assertPublished($message = null)
+ * @method static void assertPublishedCount(int $count, $message = null)
  * @method static void assertNotPublished($message = null)
  */
 class Amqp extends Facade

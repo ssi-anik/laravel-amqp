@@ -133,6 +133,19 @@ class AmqpFakeTest extends PackageBaseTestCase
         Amqp::publish($data['message']);
         Amqp::assertPublished($data['expectation'] ?? null);
     }
+    
+    /**
+     * @dataProvider messagePublishedDataProvider
+     *
+     * @param array $data
+     */
+    public function testAssertThatMessagePublishedTwice(array $data)
+    {
+        Amqp::publish($data['message']);
+        Amqp::publish($data['message']);
+        Amqp::assertPublished($data['expectation'] ?? null);
+        Amqp::assertPublishedCount(2, $data['expectation'] ?? null);
+    }
 
     /**
      * @dataProvider messageNotPublishedDataProvider

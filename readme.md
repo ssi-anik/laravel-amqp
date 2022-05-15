@@ -239,6 +239,7 @@ class MyTest extends TestCase
         
         Amqp::assertPublished();
         // Amqp::assertPublished("my-message");
+        // Amqp::assertPublishedCount(5, "my-message");
         // Amqp::assertPublished(Anik\Amqp\ProducibleMessage::class);
         // Amqp::assertPublished(Anik\Amqp\Producible::class);
         Amqp::assertPublishedOnConnection('rabbitmq');
@@ -266,7 +267,12 @@ class MyTest extends TestCase
         - No message was published that exactly matches the `$message`.
         - No message was published that exactly matches the `get_class($message)`.
         - No message was published that is an implementation of `$message`.
-
+- `Anik\Laravel\Amqp\Facades\Amqp::assertPublishedCount(int $count, $message = null)`
+    * If `$message` is `null`, it will check if exactly `$count` messages have been published.
+    * Otherwise, checks in the following order.
+        - If a message exactly matches the `$message`.
+        - If a message exactly matches the `get_class($message)`.
+        - If a message is an implementation of `$message`.
 ### Note
 
 Using `Anik\Laravel\Amqp\Facades\Amqp::consume()` after `Anik\Laravel\Amqp\Facades\Amqp::fake()` will throw exception.

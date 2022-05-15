@@ -168,6 +168,21 @@ class AmqpFake extends AmqpManager implements AmqpPubSub
         );
     }
 
+    public function assertPublishedCount(int $count, $message = null): void
+    {
+        if (is_null($message)) {
+            Assert::assertEquals($count, $this->numberOfMessagesWhen(), 'Message Count was not ' . $count);
+
+            return;
+        }
+
+        Assert::assertEquals(
+            $count,
+            $this->filterOnPublishedMessage($message)->count(),
+            sprintf('Message Count was not ' . $count . " that matches %s", $message)
+        );
+    }
+
     public function assertNotPublished($message = null): void
     {
         if (is_null($message)) {
