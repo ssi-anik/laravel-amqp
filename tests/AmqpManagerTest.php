@@ -7,6 +7,7 @@ use Anik\Laravel\Amqp\AmqpManager;
 use Anik\Laravel\Amqp\Exceptions\LaravelAmqpException;
 use Closure;
 use PhpAmqpLib\Connection\AMQPLazySocketConnection;
+use PhpAmqpLib\Connection\AMQPSocketConnection;
 
 class AmqpManagerTest extends PackageBaseTestCase
 {
@@ -55,7 +56,7 @@ class AmqpManagerTest extends PackageBaseTestCase
             }
         )->call($connection);
 
-        $this->assertInstanceOf(AMQPLazySocketConnection::class, $abstractConnection);
+        $this->assertInstanceOf(AMQPSocketConnection::class, $abstractConnection);
     }
 
     /**
