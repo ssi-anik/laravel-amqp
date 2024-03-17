@@ -54,7 +54,7 @@ jobs:
                     composer require illuminate/support:^${{ matrix.laravel }} --no-interaction --prefer-dist
 
             -   name: Run tests
-                run: ./vendor/bin/phpunit --testdox --verbose
+                run: ./vendor/bin/phpunit --testdox
 
     coverage:
         needs: tests
