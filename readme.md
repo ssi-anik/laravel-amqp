@@ -83,6 +83,19 @@ name.
 - `amqp.connections.*.consumer` holds the default properties of consumer when consuming.
 - `amqp.connections.*.qos` holds the default properties of QoS when consuming.
 
+### Octane support
+
+From >=2.1 this package supports laravel octane by default, but you have to configure octane to `warm` the connection, by adding 'amqp' to the warm array in octane configurations.
+
+```php
+  // config\octane.php
+  // ... 
+   'warm' => [
+        // ... 
+        'amqp', // <-- this line
+    ],
+```
+
 ## Usage
 
 The followings work the same.
