@@ -21,7 +21,7 @@ class AmqpFakeTest extends PackageBaseTestCase
         Amqp::fake();
     }
 
-    public function messagePublishedDataProvider(): array
+    public static function messagePublishedDataProvider(): array
     {
         $message = 'my message';
 
@@ -52,7 +52,7 @@ class AmqpFakeTest extends PackageBaseTestCase
         ];
     }
 
-    public function messageNotPublishedDataProvider(): array
+    public static function messageNotPublishedDataProvider(): array
     {
         return [
             'check if no message was published' => [[]],
@@ -77,7 +77,7 @@ class AmqpFakeTest extends PackageBaseTestCase
         ];
     }
 
-    public function exchangeNameTestDataProvider(): array
+    public static function exchangeNameTestDataProvider(): array
     {
         return [
             'use exchange from package config' => [
@@ -100,7 +100,7 @@ class AmqpFakeTest extends PackageBaseTestCase
         ];
     }
 
-    public function exchangeTypeTestDataProvider(): array
+    public static function exchangeTypeTestDataProvider(): array
     {
         return [
             'use exchange from package config' => [
