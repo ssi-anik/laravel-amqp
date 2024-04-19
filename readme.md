@@ -3,6 +3,7 @@ anik/laravel-amqp
 [![PHP Version Require](http://poser.pugx.org/anik/laravel-amqp/require/php)](//packagist.org/packages/anik/laravel-amqp)
 [![Latest Stable Version](https://poser.pugx.org/anik/laravel-amqp/v)](//packagist.org/packages/anik/laravel-amqp)
 [![Total Downloads](https://poser.pugx.org/anik/laravel-amqp/downloads)](//packagist.org/packages/anik/laravel-amqp)
+[![Jetbrains](https://img.shields.io/badge/-JetBrains-000?style=flat&logo=jetbrains)](https://jb.gg/OpenSourceSupport)
 ===
 
 [anik/amqp](https://packagist.org/packages/anik/amqp) wrapper for Laravel-ish frameworks.

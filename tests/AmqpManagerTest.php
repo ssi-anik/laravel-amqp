@@ -11,7 +11,7 @@ use PhpAmqpLib\Connection\AMQPSocketConnection;
 
 class AmqpManagerTest extends PackageBaseTestCase
 {
-    public function connectionConfigurationDataProvider(): array
+    public static function connectionConfigurationDataProvider(): array
     {
         return [
             'config is empty' => [[]],

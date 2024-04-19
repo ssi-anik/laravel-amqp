@@ -88,7 +88,7 @@ class AmqpTest extends TestCase
         );
     }
 
-    public function publishMessageTestDataProvider(): array
+    public static function publishMessageTestDataProvider(): array
     {
         return [
             'publish single message of scalar' => [
@@ -122,7 +122,7 @@ class AmqpTest extends TestCase
         ];
     }
 
-    public function publishOptionsDataProvider(): array
+    public static function publishOptionsDataProvider(): array
     {
         return [
             'when publish option is passed, should not use config value' => [
@@ -159,7 +159,7 @@ class AmqpTest extends TestCase
         ];
     }
 
-    public function exchangeTestDataProvider(): array
+    public static function exchangeTestDataProvider(): array
     {
         return [
             'when exchange is set and option is empty - uses exchange' => [
@@ -193,7 +193,7 @@ class AmqpTest extends TestCase
         ];
     }
 
-    public function queueTestDataProvider(): array
+    public static function queueTestDataProvider(): array
     {
         return [
             'when queue is set and option is empty - uses queue' => [
@@ -224,7 +224,7 @@ class AmqpTest extends TestCase
         ];
     }
 
-    public function qosTestDataProvider(): array
+    public static function qosTestDataProvider(): array
     {
         return [
             'when qos is set and option is empty - uses qos' => [
@@ -264,7 +264,7 @@ class AmqpTest extends TestCase
         ];
     }
 
-    public function queueBindTestDataProvider(): array
+    public static function queueBindTestDataProvider(): array
     {
         $headers = new AMQPTable(['key' => 'value']);
 
@@ -307,7 +307,7 @@ class AmqpTest extends TestCase
         ];
     }
 
-    public function consumerConfigTestDataProvider(): array
+    public static function consumerConfigTestDataProvider(): array
     {
         return [
             'when consumer option is passed, should not use config value' => [
