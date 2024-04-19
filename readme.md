@@ -86,15 +86,17 @@ name.
 
 ### Octane support
 
-From >=2.1 this package supports laravel octane by default, but you have to configure octane to `warm` the connection, by adding 'amqp' to the warm array in octane configurations.
+This package supports laravel octane by
+default. [To keep the AMQP connection alive](https://www.cloudamqp.com/blog/part4-rabbitmq-13-common-errors.html),
+you have to configure octane to `warm` the connection, by adding **'amqp'** to the warm array in octane configurations.
 
 ```php
-  // config\octane.php
-  // ... 
-   'warm' => [
-        // ... 
-        'amqp', // <-- this line
-    ],
+// config/octane.php
+// ... 
+'warm' => [
+    // ... 
+    'amqp', // <-- this line
+],
 ```
 
 ## Usage
@@ -287,6 +289,7 @@ class MyTest extends TestCase
         - If a message exactly matches the `$message`.
         - If a message exactly matches the `get_class($message)`.
         - If a message is an implementation of `$message`.
+
 ### Note
 
 Using `Anik\Laravel\Amqp\Facades\Amqp::consume()` after `Anik\Laravel\Amqp\Facades\Amqp::fake()` will throw exception.
