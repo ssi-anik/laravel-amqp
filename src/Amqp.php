@@ -22,8 +22,6 @@ class Amqp implements AmqpPubSub
 
     private Producer $producer;
 
-    private Consumer $consumer;
-
     public function __construct(AbstractConnection $connection, array $config = [])
     {
         $this->connection = $connection;
@@ -32,12 +30,12 @@ class Amqp implements AmqpPubSub
 
     public function getProducer(): Producer
     {
-        return $this->producer ?? $this->producer = app()->make(Producer::class, ['connection' => $this->connection]);
+        return $this->producer ??= app()->make(Producer::class, ['connection' => $this->connection]);
     }
 
     public function getConsumer(array $options = []): Consumer
     {
-        return $this->consumer ?? $this->consumer = app()->make(
+        return app()->make(
             Consumer::class,
             ['connection' => $this->connection, 'channel' => null, 'options' => $options]
         );
