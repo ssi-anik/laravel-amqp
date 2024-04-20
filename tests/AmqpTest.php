@@ -511,6 +511,33 @@ class AmqpTest extends TestCase
              );
     }
 
+    public function testReusesResolvedProducer()
+    {
+        $this->bindProducerToApp($producer = $this->getProducerMock($this->connection));
+
+        $producer->expects($this->exactly(2))->method('publishBatch');
+
+        $amqp = $this->getAmqpInstance(null, ['exchange' => ['name' => self::EXCHANGE_NAME, 'type' => 'topic']]);
+        $amqp->publish(
+            'my message',
+            'my-binding-key',
+            $data['exchange'] ?? null,
+            $data['options'] ?? []
+        );
+
+        // Bind new producer to the container
+        $this->bindProducerToApp($producer2 = $this->getProducerMock($this->connection));
+        // This producer should never be called as the previous producer is already stored in the class.
+        $producer2->expects($this->never())->method('publishBatch');
+
+        $amqp->publish(
+            'my another message',
+            'my-binding-key',
+            $data['exchange'] ?? null,
+            $data['options'] ?? []
+        );
+    }
+
     public function testConsumeHandlerIsChangesCallableToConsumable()
     {
         $this->bindConsumerToApp($consumer = $this->getConsumerMock($this->connection));
