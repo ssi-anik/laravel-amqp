@@ -347,7 +347,7 @@ class AmqpTest extends TestCase
     /**
      * @dataProvider publishMessageTestDataProvider
      *
-     * @param array $data
+     * @param  array  $data
      */
     public function testPublishFormatsMessagesToProducible(array $data)
     {
@@ -432,7 +432,7 @@ class AmqpTest extends TestCase
     /**
      * @dataProvider publishOptionsDataProvider
      *
-     * @param array $data
+     * @param  array  $data
      */
     public function testPublishPassesPublishOptionsIfAvailable(array $data)
     {
@@ -471,7 +471,7 @@ class AmqpTest extends TestCase
     /**
      * @dataProvider exchangeTestDataProvider
      *
-     * @param array $data
+     * @param  array  $data
      */
     public function testPublishMessageProcessesExchange(array $data)
     {
@@ -563,7 +563,7 @@ class AmqpTest extends TestCase
     /**
      * @dataProvider exchangeTestDataProvider
      *
-     * @param array $data
+     * @param  array  $data
      */
     public function testConsumerProcessesExchange(array $data)
     {
@@ -611,7 +611,7 @@ class AmqpTest extends TestCase
     /**
      * @dataProvider queueTestDataProvider
      *
-     * @param array $data
+     * @param  array  $data
      */
     public function testConsumerProcessesQueue(array $data)
     {
@@ -659,7 +659,7 @@ class AmqpTest extends TestCase
     /**
      * @dataProvider qosTestDataProvider
      *
-     * @param array $data
+     * @param  array  $data
      */
     public function testConsumerProcessesQos(array $data)
     {
@@ -714,7 +714,7 @@ class AmqpTest extends TestCase
     /**
      * @dataProvider queueBindTestDataProvider
      *
-     * @param array $data
+     * @param  array  $data
      */
     public function testConsumerProcessesQueueBind(array $data)
     {
@@ -762,7 +762,7 @@ class AmqpTest extends TestCase
     /**
      * @dataProvider consumerConfigTestDataProvider
      *
-     * @param array $data
+     * @param  array  $data
      */
     public function testConsumerProcessesConsumerConfig(array $data)
     {
