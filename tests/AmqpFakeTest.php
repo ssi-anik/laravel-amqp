@@ -8,6 +8,7 @@ use Anik\Amqp\ProducibleMessage;
 use Anik\Laravel\Amqp\AmqpPubSub;
 use Anik\Laravel\Amqp\Exceptions\LaravelAmqpException;
 use Anik\Laravel\Amqp\Facades\Amqp;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AmqpFakeTest extends PackageBaseTestCase
 {
@@ -123,22 +124,14 @@ class AmqpFakeTest extends PackageBaseTestCase
         ];
     }
 
-    /**
-     * @dataProvider messagePublishedDataProvider
-     *
-     * @param array $data
-     */
+    #[DataProvider('messagePublishedDataProvider')]
     public function testAssertThatMessagePublished(array $data)
     {
         Amqp::publish($data['message']);
         Amqp::assertPublished($data['expectation'] ?? null);
     }
     
-    /**
-     * @dataProvider messagePublishedDataProvider
-     *
-     * @param array $data
-     */
+    #[DataProvider('messagePublishedDataProvider')]
     public function testAssertThatMessagePublishedTwice(array $data)
     {
         Amqp::publish($data['message']);
@@ -147,11 +140,7 @@ class AmqpFakeTest extends PackageBaseTestCase
         Amqp::assertPublishedCount(2, $data['expectation'] ?? null);
     }
 
-    /**
-     * @dataProvider messageNotPublishedDataProvider
-     *
-     * @param array $data
-     */
+    #[DataProvider('messageNotPublishedDataProvider')]
     public function testAssertThatMessageWasNotPublished(array $data)
     {
         if ($data['message'] ?? false) {
@@ -161,22 +150,14 @@ class AmqpFakeTest extends PackageBaseTestCase
         Amqp::assertNotPublished($data['expectation'] ?? null);
     }
 
-    /**
-     * @dataProvider exchangeNameTestDataProvider
-     *
-     * @param array $data
-     */
+    #[DataProvider('exchangeNameTestDataProvider')]
     public function testAssertMessagePublishedOnExchange(array $data)
     {
         Amqp::publish('text', '', $data['exchange'] ?? null, $data['options'] ?? []);
         Amqp::assertPublishedOnExchange($data['expectation']);
     }
 
-    /**
-     * @dataProvider exchangeTypeTestDataProvider
-     *
-     * @param array $data
-     */
+    #[DataProvider('exchangeTypeTestDataProvider')]
     public function testAssertMessagePublishedOnExchangeType(array $data)
     {
         Amqp::publish('text', '', $data['exchange'] ?? null, $data['options'] ?? []);
