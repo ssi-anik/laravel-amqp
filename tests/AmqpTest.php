@@ -12,6 +12,7 @@ use Anik\Amqp\Qos\Qos;
 use Anik\Amqp\Queues\Queue;
 use Anik\Laravel\Amqp\Amqp;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPLazySSLConnection;
@@ -344,11 +345,7 @@ class AmqpTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider publishMessageTestDataProvider
-     *
-     * @param  array  $data
-     */
+    #[DataProvider('publishMessageTestDataProvider')]
     public function testPublishFormatsMessagesToProducible(array $data)
     {
         $this->bindProducerToApp($producer = $this->getProducerMock($this->connection));
@@ -429,11 +426,7 @@ class AmqpTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider publishOptionsDataProvider
-     *
-     * @param  array  $data
-     */
+    #[DataProvider('publishOptionsDataProvider')]
     public function testPublishPassesPublishOptionsIfAvailable(array $data)
     {
         $this->bindProducerToApp($producer = $this->getProducerMock($this->connection));
@@ -468,11 +461,7 @@ class AmqpTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider exchangeTestDataProvider
-     *
-     * @param  array  $data
-     */
+    #[DataProvider('exchangeTestDataProvider')]
     public function testPublishMessageProcessesExchange(array $data)
     {
         $this->bindProducerToApp($producer = $this->getProducerMock($this->connection));
@@ -587,11 +576,7 @@ class AmqpTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider exchangeTestDataProvider
-     *
-     * @param  array  $data
-     */
+    #[DataProvider('exchangeTestDataProvider')]
     public function testConsumerProcessesExchange(array $data)
     {
         $this->bindConsumerToApp($consumer = $this->getConsumerMock($this->connection));
@@ -635,11 +620,7 @@ class AmqpTest extends TestCase
              );
     }
 
-    /**
-     * @dataProvider queueTestDataProvider
-     *
-     * @param  array  $data
-     */
+    #[DataProvider('queueTestDataProvider')]
     public function testConsumerProcessesQueue(array $data)
     {
         $this->bindConsumerToApp($consumer = $this->getConsumerMock($this->connection));
@@ -683,11 +664,7 @@ class AmqpTest extends TestCase
              );
     }
 
-    /**
-     * @dataProvider qosTestDataProvider
-     *
-     * @param  array  $data
-     */
+    #[DataProvider('qosTestDataProvider')]
     public function testConsumerProcessesQos(array $data)
     {
         $this->bindConsumerToApp($consumer = $this->getConsumerMock($this->connection));
@@ -738,11 +715,7 @@ class AmqpTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider queueBindTestDataProvider
-     *
-     * @param  array  $data
-     */
+    #[DataProvider('queueBindTestDataProvider')]
     public function testConsumerProcessesQueueBind(array $data)
     {
         $this->bindConsumerToApp($consumer = $this->getConsumerMock($this->connection));
@@ -786,11 +759,7 @@ class AmqpTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider consumerConfigTestDataProvider
-     *
-     * @param  array  $data
-     */
+    #[DataProvider('consumerConfigTestDataProvider')]
     public function testConsumerProcessesConsumerConfig(array $data)
     {
         $this->bindConsumerToApp($consumer = $this->getConsumerMock($this->connection));

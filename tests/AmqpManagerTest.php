@@ -8,6 +8,7 @@ use Anik\Laravel\Amqp\Exceptions\LaravelAmqpException;
 use Closure;
 use PhpAmqpLib\Connection\AMQPLazySocketConnection;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AmqpManagerTest extends PackageBaseTestCase
 {
@@ -59,11 +60,7 @@ class AmqpManagerTest extends PackageBaseTestCase
         $this->assertInstanceOf(AMQPSocketConnection::class, $abstractConnection);
     }
 
-    /**
-     * @dataProvider connectionConfigurationDataProvider
-     *
-     * @param array $data
-     */
+    #[DataProvider('connectionConfigurationDataProvider')]
     public function testConnectionMethodThrowsExceptionIfConfigurationIsInvalid(array $data)
     {
         app('config')->set('amqp.connections.new', $data);
